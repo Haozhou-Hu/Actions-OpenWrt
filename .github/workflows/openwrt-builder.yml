@@ -32,19 +32,6 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-    - name: Maximize build space
-      uses: easimon/maximize-build-space@master
-      with:
-        remove-dotnet: 'true'
-        remove-android: 'true'
-        remove-haskell: 'true'
-        remove-codeql: 'true'
-        remove-docker-images: 'true'
-        
-    - name: Build
-      run: |
-        echo "Free space:"
-        df -h
           
     - name: Checkout
       uses: actions/checkout@main
@@ -53,7 +40,23 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+        sudo rm -rf /etc/apt/sources.list.d/* /opt/ghc
+        #12.0 GB
+        sudo rm "/usr/local/lib/android" -rf 2>/dev/null &
+        #8.2 GB
+        sudo rm "/opt/hostedtoolcache/CodeQL" -rf 2>/dev/null &
+        #5.0 GB
+        sudo rm "/usr/local/.ghcup" -rf 2>/dev/null &
+        #2.0 GB
+        sudo rm "/usr/share/dotnet" -rf 2>/dev/null &
+        #1.7 GB
+        sudo rm "/usr/share/swift" -rf 2>/dev/null &
+        #1.1 GB
+        #sudo rm "/usr/local/lib/node_modules" -rf 2>/dev/null &
+        #1.0 GB
+        sudo rm "/usr/local/share/powershell" -rf 2>/dev/null &
+        #500 MB
+        sudo rm "/usr/local/lib/heroku" -rf 2>/dev/null &
         sudo docker image prune --all --force
         sudo -E apt-get -qq update
         sudo -E apt-get -qq install ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libfuse-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libpython3-dev libreadline-dev libssl-dev libtool lrzsz mkisofs msmtp ninja-build p7zip p7zip-full patch pkgconf python2.7 python3 python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
@@ -61,7 +64,10 @@ jobs:
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
-        sudo chown $USER:$GROUPS /workdir
+        sudo chown $USER:$GROUPS /workdir          
+        echo "Free space:"
+        df -h
+        
 
     - name: Clone source code
       working-directory: /workdir
