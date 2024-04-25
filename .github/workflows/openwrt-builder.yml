@@ -10,7 +10,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: https://github.com/Haozhou-Hu/OpenWrt-x86_64-firmware
+name: Build-OpenWrt
 
 on:
   repository_dispatch:
