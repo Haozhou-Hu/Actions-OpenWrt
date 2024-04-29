@@ -4,7 +4,9 @@
 Build OpenWrt firmware Lean's OpenWrt using GitHub Actions
 Hereby thank P3TERX for his amazing job: https://github.com/P3TERX/Actions-OpenWrt/
 
-Changes: I clean up the container for more space for building the firmware.
+Changes: 
+- The container is cleaed up for more space to build the firmware.
+- Modified some actions.
 
 ## Usage
 
